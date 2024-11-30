@@ -59,7 +59,7 @@ app.get('/tabuada',(requisicao, resposta)=>{
     }
     resposta.end();
 });*/
-
+/*
 app.listen(porta, host, () => {
     console.log(`Servidor escutando em http://${host}:${porta}`)
-});
+});*/
