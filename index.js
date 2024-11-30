@@ -11,6 +11,7 @@ const host = "0.0.0.0";
 const porta = 4000;
 
 const app = express(); 
+export default app;
 app.use(express.json());
 
 app.use(cors());
