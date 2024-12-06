@@ -12,10 +12,10 @@ export default class ClienteDAO {
             const sql = `
                 CREATE TABLE IF NOT EXISTS cliente (
                     id INT NOT NULL AUTO_INCREMENT,
-                    nomeCompleto VARCHAR(100) NOT NULL,
+                    nome VARCHAR(100) NOT NULL,
                     email VARCHAR(100) NOT NULL,
                     telefone VARCHAR(20) NOT NULL,
-                    documento VARCHAR(20) NOT NULL UNIQUE,
+                    cpf VARCHAR(20) NOT NULL UNIQUE,
                     CONSTRAINT pk_cliente PRIMARY KEY (id)
                 );
             `;
@@ -30,10 +30,10 @@ export default class ClienteDAO {
         if (cliente instanceof Cliente) {
             const conexao = await conectar();
             const sql = `
-                INSERT INTO cliente (nomeCompleto, email, telefone, documento)
+                INSERT INTO cliente (nome, email, telefone, cpf)
                 VALUES (?, ?, ?, ?);
             `;
-            const parametros = [cliente.nomeCompleto, cliente.email, cliente.telefone, cliente.documento];
+            const parametros = [cliente.nome, cliente.email, cliente.telefone, cliente.cpf];
             const resultado = await conexao.execute(sql, parametros);
             cliente.id = resultado[0].insertId;
             await conexao.release();
@@ -45,10 +45,10 @@ export default class ClienteDAO {
             const conexao = await conectar();
             const sql = `
                 UPDATE cliente
-                SET nomeCompleto = ?, email = ?, telefone = ?, documento = ?
+                SET nome = ?, email = ?, telefone = ?, cpf = ?
                 WHERE id = ?;
             `;
-            const parametros = [cliente.nomeCompleto, cliente.email, cliente.telefone, cliente.documento, cliente.id];
+            const parametros = [cliente.nome, cliente.email, cliente.telefone, cliente.cpf, cliente.id];
             await conexao.execute(sql, parametros);
             await conexao.release();
         }
@@ -73,8 +73,8 @@ export default class ClienteDAO {
         if (isNaN(parseInt(termo))) {
             sql = `
                 SELECT * FROM cliente
-                WHERE nomeCompleto LIKE ? OR email LIKE ? OR documento LIKE ?
-                ORDER BY nomeCompleto;
+                WHERE nome LIKE ? OR email LIKE ? OR cpf LIKE ?
+                ORDER BY nome;
             `;
             const termoBusca = `%${termo}%`;
             parametros = [termoBusca, termoBusca, termoBusca];
@@ -82,7 +82,7 @@ export default class ClienteDAO {
             sql = `
                 SELECT * FROM cliente
                 WHERE id = ?
-                ORDER BY nomeCompleto;
+                ORDER BY nome;
             `;
             parametros = [termo];
         }
@@ -95,10 +95,10 @@ export default class ClienteDAO {
         for (const registro of registros) {
             const cliente = new Cliente(
                 registro['id'],
-                registro['nomeCompleto'],
+                registro['nome'],
                 registro['email'],
                 registro['telefone'],
-                registro['documento']
+                registro['cpf']
             );
             listaClientes.push(cliente);
         }

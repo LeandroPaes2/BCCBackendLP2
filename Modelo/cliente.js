@@ -3,18 +3,18 @@ import ClienteDAO from "../Persistencia/clienteDAO.js";
 export default class Cliente {
     // Atributos privados
     #id;
-    #nomeCompleto;
+    #nome;
     #email;
     #telefone;
-    #documento;
+    #cpf;
 
     // Construtor da classe
-    constructor(id = 0, nomeCompleto = "", email = "", telefone = "", documento = "") {
+    constructor(id = 0, nome = "", email = "", telefone = "", cpf = "") {
         this.#id = id;
-        this.#nomeCompleto = nomeCompleto;
+        this.#nome = nome;
         this.#email = email;
         this.#telefone = telefone;
-        this.#documento = documento;
+        this.#cpf = cpf;
     }
 
     // Getters e setters para os atributos
@@ -26,12 +26,12 @@ export default class Cliente {
         this.#id = value;
     }
 
-    get nomeCompleto() {
-        return this.#nomeCompleto;
+    get nome() {
+        return this.#nome;
     }
 
-    set nomeCompleto(value) {
-        this.#nomeCompleto = value;
+    set nome(value) {
+        this.#nome = value;
     }
 
     get email() {
@@ -50,22 +50,22 @@ export default class Cliente {
         this.#telefone = value;
     }
 
-    get documento() {
-        return this.#documento;
+    get cpf() {
+        return this.#cpf;
     }
 
-    set documento(value) {
-        this.#documento = value;
+    set cpf(value) {
+        this.#cpf = value;
     }
 
     // Método toJSON para conversão em JSON
     toJSON() {
         return {
             id: this.#id,
-            nomeCompleto: this.#nomeCompleto,
+            nome: this.#nome,
             email: this.#email,
             telefone: this.#telefone,
-            documento: this.#documento
+            cpf: this.#cpf
         };
     }
 
