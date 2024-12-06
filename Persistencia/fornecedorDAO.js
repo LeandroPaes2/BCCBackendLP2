@@ -16,7 +16,7 @@ export default class FornecedorDAO {
                 forn_nome VARCHAR(200) NOT NULL,
                 forn_endereco VARCHAR(255) NOT NULL,
                 forn_contato VARCHAR(50) NOT NULL,
-                forn_cpf VARCHAR(11) NOT NULL,
+                forn_cpf VARCHAR(15) NOT NULL,
                 CONSTRAINT pk_fornecedor PRIMARY KEY (forn_codigo)
             )
             `;
