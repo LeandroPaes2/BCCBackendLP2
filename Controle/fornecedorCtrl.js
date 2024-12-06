@@ -1,47 +1,28 @@
 import Fornecedor from "../Modelo/fornecedor.js";
-export default class FornecedorCtrl {
 
+export default class FornecedorCtrl {
     gravar(requisicao, resposta) {
         resposta.type("application/json");
 
         if (requisicao.method === 'POST' && requisicao.is("application/json")) {
-            const nome = requisicao.body.nome;
-            const endereco = requisicao.body.endereco;
-            const contato = requisicao.body.contato;
-            const cpf = requisicao.body.cpf;
+            const { nome, endereco, contato, cpf } = requisicao.body;
 
-            // Validação pseudo básica
+            // Validação básica
             if (nome && endereco && contato && cpf) {
                 const fornecedor = new Fornecedor(0, nome, endereco, contato, cpf);
 
-                fornecedor.consultar(codigo)
-                    .then((listaFornecedores) => {
-                        if (listaFornecedores.length === 0) {
-                            fornecedor.incluir()
-                                .then(() => {
-                                    resposta.status(200).json({
-                                        "status": true,
-                                        "mensagem": "Fornecedor adicionado com sucesso!",
-                                        "codigo": fornecedor.codigo
-                                    });
-                                })
-                                .catch((erro) => {
-                                    resposta.status(500).json({
-                                        "status": false,
-                                        "mensagem": `Não foi possível incluir o fornecedor: ${erro.message}`
-                                    });
-                                });
-                        } else {
-                            resposta.status(400).json({
-                                "status": false,
-                                "mensagem": "O código informado já está cadastrado para outro fornecedor."
-                            });
-                        }
+                fornecedor.gravar()
+                    .then(() => {
+                        resposta.status(200).json({
+                            "status": true,
+                            "mensagem": "Fornecedor adicionado com sucesso!",
+                            "codigo": fornecedor.codigo
+                        });
                     })
                     .catch((erro) => {
                         resposta.status(500).json({
                             "status": false,
-                            "mensagem": `Erro ao verificar fornecedor: ${erro.message}`
+                            "mensagem": "Não foi possível incluir o fornecedor: " + erro.message
                         });
                     });
             } else {
@@ -63,25 +44,23 @@ export default class FornecedorCtrl {
 
         if ((requisicao.method === 'PUT' || requisicao.method === 'PATCH') && requisicao.is("application/json")) {
             const codigo = requisicao.params.codigo;
-            const nome = requisicao.body.nome;
-            const endereco = requisicao.body.endereco;
-            const contato = requisicao.body.contato;
-            const cpf = requisicao.body.cpf;
+            const { nome, endereco, contato, cpf } = requisicao.body;
 
-            if (codigo && nome && endereco && contato && cpf) {
+            // Validação básica
+            if (codigo > 0 && nome && endereco && contato && cpf) {
                 const fornecedor = new Fornecedor(codigo, nome, endereco, contato, cpf);
 
-                fornecedor.alterar()
+                fornecedor.editar()
                     .then(() => {
                         resposta.status(200).json({
                             "status": true,
-                            "mensagem": "Fornecedor alterado com sucesso!"
+                            "mensagem": "Fornecedor alterado com sucesso!",
                         });
                     })
                     .catch((erro) => {
                         resposta.status(500).json({
                             "status": false,
-                            "mensagem": `Não foi possível alterar o fornecedor: ${erro.message}`
+                            "mensagem": "Não foi possível alterar o fornecedor: " + erro.message
                         });
                     });
             } else {
@@ -104,20 +83,21 @@ export default class FornecedorCtrl {
         if (requisicao.method === 'DELETE') {
             const codigo = requisicao.params.codigo;
 
-            if (codigo) {
+            // Validação básica
+            if (codigo > 0) {
                 const fornecedor = new Fornecedor(codigo);
 
                 fornecedor.excluir()
                     .then(() => {
                         resposta.status(200).json({
                             "status": true,
-                            "mensagem": "Fornecedor excluído com sucesso!"
+                            "mensagem": "Fornecedor excluído com sucesso!",
                         });
                     })
                     .catch((erro) => {
                         resposta.status(500).json({
                             "status": false,
-                            "mensagem": `Não foi possível excluir o fornecedor: ${erro.message}`
+                            "mensagem": "Não foi possível excluir o fornecedor: " + erro.message
                         });
                     });
             } else {
@@ -137,11 +117,12 @@ export default class FornecedorCtrl {
     consultar(requisicao, resposta) {
         resposta.type("application/json");
 
-        if (requisicao.method === 'GET') {
+        if (requisicao.method === "GET") {
             let codigo = requisicao.params.codigo;
 
-            if (!codigo) {
-                codigo = ""; // Retorna todos os fornecedores se o código não for informado
+            // Evitar que código seja undefined
+            if (isNaN(codigo)) {
+                codigo = "";
             }
 
             const fornecedor = new Fornecedor();
@@ -153,7 +134,7 @@ export default class FornecedorCtrl {
                 .catch((erro) => {
                     resposta.status(500).json({
                         "status": false,
-                        "mensagem": `Erro ao consultar fornecedores: ${erro.message}`
+                        "mensagem": "Erro ao consultar fornecedores: " + erro.message
                     });
                 });
         } else {
