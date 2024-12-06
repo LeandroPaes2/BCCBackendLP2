@@ -3,7 +3,7 @@ import rotaProduto from './Rotas/rotaProdutos.js';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import rotaCategoria from './Rotas/rotaCategoria.js';
-
+import rotaFornecedor from './Rotas/rotaFornecedor.js';
 
 dotenv.config();
 
@@ -27,3 +27,4 @@ app.use(express.static('./publico'));
 
 app.use("/produtos",rotaProduto);
 app.use("/categorias",rotaCategoria);
+app.use("/fornecedores",rotaFornecedor);
