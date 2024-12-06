@@ -1,20 +1,18 @@
 import Fornecedor from "../Modelo/fornecedor.js";
-
 export default class FornecedorCtrl {
 
     gravar(requisicao, resposta) {
         resposta.type("application/json");
 
         if (requisicao.method === 'POST' && requisicao.is("application/json")) {
-            const codigo = requisicao.body.codigo;
             const nome = requisicao.body.nome;
             const endereco = requisicao.body.endereco;
             const contato = requisicao.body.contato;
             const cpf = requisicao.body.cpf;
 
             // Validação pseudo básica
-            if (codigo && nome && endereco && contato && cpf) {
-                const fornecedor = new Fornecedor(codigo, nome, endereco, contato, cpf);
+            if (nome && endereco && contato && cpf) {
+                const fornecedor = new Fornecedor(0, nome, endereco, contato, cpf);
 
                 fornecedor.consultar(codigo)
                     .then((listaFornecedores) => {
